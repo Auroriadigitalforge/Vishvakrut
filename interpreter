@@ -1,0 +1,24 @@
+class VishvakrutInterpreter:
+    def __init__(self):
+        self.variables = {}
+
+    def execute(self, ast):
+        for node in ast:
+            if node[0] == 'Assign':
+                var_name = node[1]
+                value = node[2]
+                self.variables[var_name] = value  # Save variable to interpreter
+            elif node[0] == 'FunctionCall':
+                func_name = node[1]
+                argument = node[2]
+                if func_name == 'show':
+                    self.show(argument)  # Call show function with argument
+
+    def show(self, content):
+        # Check if content is a variable or string
+        if content in self.variables:
+            print(self.variables[content])  # Print variable value
+        elif isinstance(content, str):
+            print(content)  # Print string content
+        else:
+            print("Undefined variable or invalid argument")  # Handle undefined variable
