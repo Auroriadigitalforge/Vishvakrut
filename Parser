@@ -1,0 +1,32 @@
+# Parser for Vishvakrut code
+def parse(tokens):
+    ast = []
+    i = 0
+    
+    while i < len(tokens):
+        token_type, token_value = tokens[i]
+        
+        if token_type == 'VAR' and tokens[i + 1][1] == '=':  # Assignment
+            var_name = token_value
+            # If the next token is a number or an expression, process it.
+            if tokens[i + 2][0] == 'NUMBER':
+                value = tokens[i + 2][1]
+            else:
+                # Handle an expression (e.g., 10 + 5)
+                value = parse_expression(tokens[i + 2:])
+            ast.append(('Assign', var_name, value))
+            i += 3  # Move past the assignment
+        elif token_type == 'VAR' and tokens[i + 1][1] == '(':  # Function Call
+            func_name = token_value
+            # Find the content inside the parentheses (it could be a variable or a string)
+            content = tokens[i + 2][1] if tokens[i + 2][0] == 'STRING' else tokens[i + 2][1]
+            ast.append(('FunctionCall', func_name, content))
+            i += 4  # Skip over the function call tokens (show(x) -> show and (x))
+        else:
+            i += 1
+    
+    return ast
+
+def parse_expression(tokens):
+    # This will handle simple arithmetic like 10 + 5
+    return eval(''.join([token[1] for token in tokens if token[0] != 'SKIP']))
