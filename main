@@ -1,0 +1,21 @@
+from lexer import lexer
+from parser import parse
+from interpreter import VishvakrutInterpreter
+
+# Read code from a file (e.g., vishvakrut_code.vkt)
+with open('vishvakrut_code.vkt', 'r') as file:
+    code = file.read()
+
+# Tokenize the code
+tokens = lexer(code)
+#print(f'Tokens: {tokens}')  # Print the tokens to verify
+
+# Parse the tokens into an AST
+ast = parse(tokens)
+#print(f'AST: {ast}')  # Print the AST to verify
+
+# Create an instance of the VishvakrutInterpreter
+interpreter = VishvakrutInterpreter()
+
+# Execute the AST
+interpreter.execute(ast)
